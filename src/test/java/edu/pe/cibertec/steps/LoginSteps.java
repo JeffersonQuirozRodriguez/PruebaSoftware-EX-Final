@@ -1,7 +1,9 @@
 package edu.pe.cibertec.steps;
 
 import edu.pe.cibertec.config.AppiumConfig;
+import edu.pe.cibertec.pages.HomePage;
 import edu.pe.cibertec.pages.LoginPage;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -9,6 +11,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
+import org.openqa.selenium.WebElement;
 
 public class LoginSteps {
 
@@ -55,11 +59,15 @@ public class LoginSteps {
 
     @Then("deberia acceder a la pantalla principal")
     public void deberiaAccederALaPantallaPrincipal(){
-        System.out.println("VALIDANDO ACCESO PANTALLA PRINCIPAL");
+        HomePage homePage = new HomePage(driver);
+        Assert.assertTrue("HomePage no se mostró tras login exitoso", homePage.isHomePageDisplayed());
     }
 
     @Then("deberia ver un mensaje de error")
     public void deberiaVerUnMensajeDeError(){
-        System.out.println("VALIDANDO MENSAJE DE ERROR");
+        WebElement errorMessage = driver.findElement(
+                AppiumBy.xpath("//android.widget.TextView[contains(@text,'Email o password incorrecto')]")
+        );
+        Assert.assertTrue("Mensaje de error no visible en login fallido", errorMessage.isDisplayed());
     }
 }

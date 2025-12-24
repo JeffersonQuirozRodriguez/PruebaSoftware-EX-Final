@@ -81,5 +81,13 @@ public class HomePage {
         searchField.click();
         searchField.sendKeys(productoName);
     }
+    // BOTÓN + (agregar producto)
+    public void addFirstProductToCart() {
+        driver.findElement(
+                AppiumBy.androidUIAutomator(
+                        "new UiSelector().className(\"android.widget.Button\").instance(0)")
+        ).click();
+    }
+
 
 }

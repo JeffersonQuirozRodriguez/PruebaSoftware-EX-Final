@@ -19,34 +19,43 @@ public class ShippingPage {
     }
 
     public void enterShippingAddress(String address) {
-        WebElement addressField = wait.until(
+        WebElement input = wait.until(
                 ExpectedConditions.elementToBeClickable(
                         AppiumBy.className("android.widget.EditText")
                 )
         );
-        addressField.click();
-        addressField.sendKeys(address);
+        input.clear(); // borra cualquier valor existente
+        if (address != null && !address.isEmpty()) {
+            input.sendKeys(address);
+        }
+    }
+
+    public void selectYapePayment() {
+        driver.findElement(
+                AppiumBy.androidUIAutomator(
+                        "new UiSelector().className(\"android.widget.RadioButton\").instance(1)")
+        ).click();
     }
 
     public void confirmPurchase() {
-        WebElement confirmButton = wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        AppiumBy.xpath("//android.widget.TextView[@text='Confirmar compra']")
-                )
-        );
-        confirmButton.click();
+        driver.findElement(
+                AppiumBy.androidUIAutomator(
+                        "new UiSelector().className(\"android.widget.Button\").instance(0)")
+        ).click();
     }
 
     public boolean isAddressRequiredMessageDisplayed() {
         try {
-            WebElement msg = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            AppiumBy.xpath("//android.widget.TextView[@text='Ingrese dirección de envío']")
-                    )
-            );
-            return msg.isDisplayed();
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement message = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    AppiumBy.xpath("//android.widget.TextView[contains(@text,'La dirección es requerida')]")
+            ));
+            return message.isDisplayed();
         } catch (Exception e) {
+            // Si no aparece en 5 segundos, devuelve false
             return false;
         }
     }
+
+
 }

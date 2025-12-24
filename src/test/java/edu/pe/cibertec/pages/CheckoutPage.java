@@ -13,43 +13,23 @@ public class CheckoutPage {
     private AndroidDriver driver;
     private WebDriverWait wait;
 
+
     public CheckoutPage(AndroidDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public void proceedToCheckout() {
-        WebElement checkoutButton = wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        AppiumBy.xpath("//android.widget.TextView[@text='Proceder al checkout']")
+    public boolean isPurchaseSuccessMessageDisplayed() {
+        return wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        AppiumBy.xpath("//android.widget.TextView[@text='¡Pedido Confirmado!']")
                 )
-        );
-        checkoutButton.click();
+        ).isDisplayed();
     }
 
     public boolean isEmptyCartMessageDisplayed() {
-        try {
-            WebElement msg = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            AppiumBy.xpath("//android.widget.TextView[@text='Tu carrito está vacío']")
-                    )
-            );
-            return msg.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean isPurchaseSuccessMessageDisplayed() {
-        try {
-            WebElement msg = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                            AppiumBy.xpath("//android.widget.TextView[@text='Compra realizada con éxito']")
-                    )
-            );
-            return msg.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+        return driver.findElements(
+                AppiumBy.xpath("//android.widget.TextView[@text='Tu carrito está vacío']")
+        ).size() > 0;
     }
 }

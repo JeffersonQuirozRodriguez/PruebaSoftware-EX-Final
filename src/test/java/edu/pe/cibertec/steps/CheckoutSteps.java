@@ -38,14 +38,19 @@ public class CheckoutSteps {
 
     @Given("que el usuario tiene productos en el carrito")
     public void usuarioTieneProductosEnElCarrito() {
+
+        // LOGIN REAL
         loginPage.login("admin@test.com", "123456");
         Assertions.assertTrue(homePage.isHomePageDisplayed());
 
-        homePage.clickProduct("Laptop HP Pavilion");
-        new ProductDetailPage(driver).ClickAddToCart();
+        // AGREGAR PRODUCTO CON BOTÓN +
+        homePage.addFirstProductToCart();
+
+        // IR AL CARRITO
         homePage.clickCartTab();
 
-        Assertions.assertTrue(cartPage.isCartDisplayed());
+        Assertions.assertTrue(cartPage.isCartDisplayed(),
+                "ERROR: No se mostró la pantalla del carrito");
     }
 
     @Given("que el usuario tiene el carrito vacio")
@@ -53,7 +58,8 @@ public class CheckoutSteps {
         loginPage.login("admin@test.com", "123456");
         homePage.clickCartTab();
 
-        Assertions.assertTrue(cartPage.isCartEmpty());
+        Assertions.assertTrue(cartPage.isCartEmpty(),
+                "ERROR: El carrito no está vacío");
     }
 
     // =====================
@@ -62,12 +68,13 @@ public class CheckoutSteps {
 
     @When("procede al checkout")
     public void procedeAlCheckout() {
-        checkoutPage.proceedToCheckout();
+        cartPage.clickProceedToCheckout();
     }
 
     @When("ingresa los datos de envio")
     public void ingresaDatosDeEnvio() {
-        shippingPage.enterShippingAddress("Av. Lima 123");
+        shippingPage.enterShippingAddress("Av. Principal 123");
+        shippingPage.selectYapePayment();
     }
 
     @When("confirma la compra")
@@ -75,11 +82,17 @@ public class CheckoutSteps {
         shippingPage.confirmPurchase();
     }
 
-    @When("intenta proceder al checkout")
-    public void intentaCheckout() {
-        checkoutPage.proceedToCheckout();
+    @When("no ingresa los datos de envio")
+    public void noIngresaDatosDeEnvio() {
+        shippingPage.enterShippingAddress(""); // deja el campo vacío
+        shippingPage.selectYapePayment(); // si el pago es obligatorio, puedes seleccionarlo
     }
 
+
+    @When("intenta proceder al checkout")
+    public void intentaCheckout() {
+        cartPage.clickProceedToCheckoutIfAvailable();
+    }
     // =====================
     // THEN
     // =====================
@@ -88,7 +101,7 @@ public class CheckoutSteps {
     public void mensajeCompraExitosa() {
         Assertions.assertTrue(
                 checkoutPage.isPurchaseSuccessMessageDisplayed(),
-                "ERROR: No se mostró compra exitosa"
+                "ERROR: No se mostró el mensaje de pedido confirmado"
         );
     }
 
@@ -99,6 +112,7 @@ public class CheckoutSteps {
                 "ERROR: No se mostró mensaje de carrito vacío"
         );
     }
+
     @Then("deberia ver mensaje de direccion requerida")
     public void mensajeDireccionRequerida() {
         Assertions.assertTrue(
@@ -106,5 +120,6 @@ public class CheckoutSteps {
                 "ERROR: No se mostró mensaje de dirección requerida"
         );
     }
+
 
 }

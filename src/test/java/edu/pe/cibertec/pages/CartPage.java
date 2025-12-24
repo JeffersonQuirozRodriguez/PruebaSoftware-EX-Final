@@ -65,4 +65,49 @@ public class CartPage {
     public void goBack(){
         this.driver.navigate().back();
     }
+
+
+
+
+
+    public void clickProceedToCheckout() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        // Scroll hasta que el texto "Proceder al Pago" esté visible
+        driver.findElement(AppiumBy.androidUIAutomator(
+                "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().textContains(\"Proceder al Pago\"));"
+        ));
+
+        // Buscar cualquier elemento clickeable con ese texto
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Proceder al Pago\")")
+                )
+        );
+
+        checkoutButton.click();
+    }
+    public void clickProceedToCheckoutIfAvailable() {
+        // Primero verificamos si el carrito está vacío
+        if (isCartEmpty()) {
+            System.out.println("El carrito está vacío, no se puede proceder al checkout.");
+            return; // no hacer nada
+        }
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        // Scroll hasta que el texto "Proceder al Pago" esté visible
+        driver.findElement(AppiumBy.androidUIAutomator(
+                "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().textContains(\"Proceder al Pago\"));"
+        ));
+
+        // Buscar cualquier elemento clickeable con ese texto
+        WebElement checkoutButton = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        AppiumBy.androidUIAutomator("new UiSelector().textContains(\"Proceder al Pago\")")
+                )
+        );
+
+        checkoutButton.click();
+    }
 }

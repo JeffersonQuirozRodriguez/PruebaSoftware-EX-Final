@@ -16,5 +16,6 @@
     Scenario: No permite completar compra sin direccion de envio
       Given que el usuario tiene productos en el carrito
       When procede al checkout
+      And no ingresa los datos de envio
       And confirma la compra
       Then deberia ver mensaje de direccion requerida

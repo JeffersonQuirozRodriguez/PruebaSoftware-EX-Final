@@ -49,6 +49,7 @@ public class LoginSteps {
 
     @And("hacer clic en el boton login")
     public void haceClicEnElBotonLogin(){
+        driver.hideKeyboard();
         loginPage.clickLoginButton();
     }
 

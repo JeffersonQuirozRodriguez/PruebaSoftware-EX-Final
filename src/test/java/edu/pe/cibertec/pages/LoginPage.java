@@ -39,10 +39,11 @@ public class LoginPage {
     // ACCIONES DE LOS ELEMENTOS
 
     public void enterEmail(String email){
-        getPasswordField().click();
+        getEmailField().click();
         getEmailField().clear();
         getEmailField().sendKeys(email);
     }
+
 
     public void enterPassword(String password)
     {
@@ -58,6 +59,7 @@ public class LoginPage {
     public void login(String email, String password){
         enterEmail(email);
         enterPassword(password);
+        driver.hideKeyboard();
         clickLoginButton();
     }
 

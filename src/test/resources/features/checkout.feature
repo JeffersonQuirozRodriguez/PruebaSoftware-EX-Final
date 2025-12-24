@@ -12,3 +12,9 @@
       Given que el usuario tiene el carrito vacio
       When intenta proceder al checkout
       Then deberia ver mensaje de carrito vacio
+
+    Scenario: No permite completar compra sin direccion de envio
+      Given que el usuario tiene productos en el carrito
+      When procede al checkout
+      And confirma la compra
+      Then deberia ver mensaje de direccion requerida
